@@ -3,23 +3,29 @@
    ========================================================================== */
 
 :root {
-  /* Bright Instagram Palette */
-  --bg-app: #f8f9fa;
+  /* 9.SEOUL Global Design Tokens (Warm Mustard & Deep Chestnut Brown) */
+  --bg-app: #fdfbf7;           /* Warm Off-White Canvas */
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-card: #ffffff;
-  --border-subtle: #f0f2f5;
-  --border-card: #eaedf2;
-  --border-active: #e11d48;
+  --border-subtle: #efe9e0;
+  --border-card: #e8ded1;
+  --border-active: #f4c724;
 
-  /* Instagram Gradient & Accent Tokens */
-  --color-primary: #e11d48; /* Vibrant Rose / Coral */
-  --color-primary-hover: #be123c;
-  --color-primary-glow: rgba(225, 29, 72, 0.25);
-  --color-insta-gradient: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
-  --color-insta-soft: linear-gradient(135deg, rgba(245, 133, 41, 0.1) 0%, rgba(221, 42, 123, 0.1) 50%, rgba(129, 52, 175, 0.1) 100%);
+  /* Color Palette Tokens */
+  --color-primary: #f4c724;        /* Warm Mustard Yellow (액션/강조) */
+  --color-primary-hover: #e5b81b;
+  --color-primary-glow: rgba(244, 199, 36, 0.4);
+  --color-secondary: #4a3525;      /* Deep Chestnut Brown (타이틀/무게감) */
+  --color-secondary-hover: #3d2b1e;
+  --color-secondary-light: #6d4c41;
 
-  /* Strict Category Accents (Bright & Fresh) */
+  /* Brand Linear Gradient (Bottom: Deep Brown -> Top: Warm Mustard) */
+  --color-brand-gradient: linear-gradient(to top, #4a3525 0%, #7a583e 35%, #c99824 75%, #f4c724 100%);
+  --color-insta-gradient: linear-gradient(135deg, #f4c724 0%, #d97706 50%, #4a3525 100%);
+  --color-insta-soft: linear-gradient(135deg, rgba(244, 199, 36, 0.15) 0%, rgba(217, 119, 6, 0.1) 50%, rgba(74, 53, 37, 0.1) 100%);
+
+  /* Category Accents */
   --color-exp: #059669; /* Fresh Matcha Green */
   --color-exp-light: #10b981;
   --color-exp-bg: #ecfdf5;
@@ -30,14 +36,20 @@
   --color-make-bg: #fff7ed;
   --color-make-border: #fed7aa;
 
-  /* Typography (High Contrast Clean Black & Slate) */
-  --text-main: #0f172a;
-  --text-body: #334155;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
+  /* Typography (Deep Chestnut Brown & Warm Muted Earth Tones) */
+  --text-main: #4a3525;       /* Deep Chestnut Brown */
+  --text-body: #5a4535;
+  --text-muted: #8d7b68;
+  --text-dim: #b0a190;
   --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-ko: 'Noto Serif KR', serif;
+
+  /* Dimensions & Smooth Rounded Corners (24px~28px) */
+  --radius-sm: 12px;
+  --radius-md: 24px;
+  --radius-lg: 28px;
+  --radius-full: 9999px;
 
   /* Dimensions & Radius */
   --app-max-width: 440px;
@@ -115,7 +127,7 @@ button, input, select, textarea {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+  background: var(--color-brand-gradient); /* Bottom Brown -> Top Mustard Yellow */
   display: flex;
   flex-direction: column;
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -154,16 +166,17 @@ button, input, select, textarea {
   margin-top: 100px;
 }
 
-/* Glowing 9 Emblem Ring */
+/* Glowing 9 Emblem Ring (Deep Chestnut Brown with Warm Yellow '9') */
 .splash-emblem-ring {
-  width: 100px;
-  height: 100px;
-  border-radius: 30px;
-  background: var(--color-insta-gradient);
+  width: 104px;
+  height: 104px;
+  border-radius: 32px;
+  background: var(--color-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 16px 40px rgba(225, 29, 72, 0.4);
+  box-shadow: 0 16px 40px rgba(74, 53, 37, 0.5);
+  border: 2px solid rgba(244, 199, 36, 0.6);
   margin-bottom: 24px;
   position: relative;
   animation: logo-float 3s ease-in-out infinite;
@@ -178,7 +191,7 @@ button, input, select, textarea {
   font-family: var(--font-heading);
   font-size: 56px;
   font-weight: 900;
-  color: #ffffff;
+  color: var(--color-primary); /* Warm Mustard Yellow */
   line-height: 1;
 }
 
@@ -186,11 +199,8 @@ button, input, select, textarea {
   font-family: var(--font-heading);
   font-size: 42px;
   font-weight: 900;
-  letter-spacing: 1px;
-  background: var(--color-insta-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.1;
+  color: var(--color-secondary);
+  letter-spacing: 2px;
   margin-bottom: 8px;
 }
 
@@ -1289,14 +1299,13 @@ button, input, select, textarea {
   left: 0;
   right: 0;
   height: var(--bottom-nav-height);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-subtle);
+  background: var(--color-secondary); /* Deep Chestnut Brown */
+  border-top: 1px solid rgba(244, 199, 36, 0.2);
   display: flex;
   align-items: center;
   justify-content: space-around;
   z-index: 100;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .nav-tab-item {
@@ -1307,7 +1316,7 @@ button, input, select, textarea {
   gap: 3px;
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: #bcaaa4;
   cursor: pointer;
   position: relative;
   padding: 6px 14px;
@@ -1326,7 +1335,7 @@ button, input, select, textarea {
 }
 
 .nav-tab-item.active {
-  color: #e11d48;
+  color: var(--color-primary); /* Warm Mustard Yellow */
 }
 
 .nav-tab-item.active .tab-icon {
@@ -1334,7 +1343,7 @@ button, input, select, textarea {
 }
 
 .nav-tab-item.active .tab-label {
-  color: #e11d48;
+  color: var(--color-primary); /* Warm Mustard Yellow */
   font-weight: 800;
 }
 
@@ -1576,14 +1585,20 @@ button, input, select, textarea {
 }
 
 .btn-sheet-book {
-  background: var(--color-insta-gradient);
+  background: var(--color-primary); /* Warm Mustard Yellow */
   border: none;
-  color: #ffffff;
+  color: var(--color-secondary);   /* Deep Chestnut Brown */
   font-weight: 800;
-  padding: 11px 22px;
-  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  border-radius: var(--radius-lg); /* 28px */
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 4px 14px var(--color-primary-glow);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-sheet-book:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
 }
 
 /* Checkout Sheet */
@@ -1735,15 +1750,21 @@ button, input, select, textarea {
 
 .btn-mobile-pay-action {
   width: 100%;
-  background: var(--color-insta-gradient);
+  background: var(--color-primary); /* Warm Mustard Yellow */
   border: none;
-  color: #ffffff;
+  color: var(--color-secondary);   /* Deep Chestnut Brown */
   font-size: 16px;
   font-weight: 800;
-  padding: 15px;
-  border-radius: var(--radius-md);
+  padding: 16px;
+  border-radius: var(--radius-lg); /* 28px */
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 4px 16px var(--color-primary-glow);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-mobile-pay-action:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================

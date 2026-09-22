@@ -16,76 +16,61 @@ class GoogleMapController {
     this.isGoogleLoaded = false;
   }
 
-  // Bright & Clean Modern Travel Map Styling (Instagram / Airbnb Style)
+  // Warm Sepia & Retro Map Styling (Warm Earth, Mustard & Chestnut Brown)
   getMapStyles() {
     return [
-      { elementType: "geometry", stylers: [{ color: "#f5f7fa" }] },
-      { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }, { weight: 2 }] },
-      { elementType: "labels.text.fill", stylers: [{ color: "#334155" }] },
+      { elementType: "geometry", stylers: [{ color: "#f8f5ee" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#4a3525" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#fdfbf7" }, { weight: 2 }] },
+      {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#d7c9b8" }]
+      },
       {
         featureType: "administrative.locality",
         elementType: "labels.text.fill",
-        stylers: [{ color: "#0f172a" }, { weight: 3 }]
+        stylers: [{ color: "#4a3525" }, { weight: 3 }]
+      },
+      {
+        featureType: "landscape.natural",
+        elementType: "geometry",
+        stylers: [{ color: "#f1ebe1" }]
       },
       {
         featureType: "poi",
         elementType: "geometry",
-        stylers: [{ color: "#edf2f7" }]
+        stylers: [{ color: "#e9dfd1" }]
       },
       {
         featureType: "poi",
         elementType: "labels.text.fill",
-        stylers: [{ color: "#64748b" }]
+        stylers: [{ color: "#6d4c41" }]
       },
       {
         featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [{ color: "#dcfce7" }] /* Fresh mint green parks */
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#059669" }]
+        elementType: "geometry.fill",
+        stylers: [{ color: "#ded3c0" }]
       },
       {
         featureType: "road",
         elementType: "geometry",
-        stylers: [{ color: "#ffffff" }] /* Clean white roads */
+        stylers: [{ color: "#ffffff" }]
       },
       {
-        featureType: "road",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#e2e8f0" }]
-      },
-      {
-        featureType: "road",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#475569" }]
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [{ color: "#fbf8f2" }]
       },
       {
         featureType: "road.highway",
         elementType: "geometry",
-        stylers: [{ color: "#fed7aa" }] /* Soft warm orange highways */
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#fdba74" }]
-      },
-      {
-        featureType: "transit",
-        elementType: "geometry",
-        stylers: [{ color: "#e2e8f0" }]
+        stylers: [{ color: "#f4c724" }]
       },
       {
         featureType: "water",
-        elementType: "geometry",
-        stylers: [{ color: "#bae6fd" }] /* Soft bright sky blue water */
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#0284c7" }]
+        elementType: "geometry.fill",
+        stylers: [{ color: "#d5ded9" }]
       }
     ];
   }
@@ -149,10 +134,10 @@ class GoogleMapController {
         zIndex: 999,
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
-          scale: 9,
-          fillColor: '#0284c7',
+          scale: 10,
+          fillColor: '#f4c724',
           fillOpacity: 1,
-          strokeColor: '#ffffff',
+          strokeColor: '#4a3525',
           strokeWeight: 3
         }
       });
@@ -160,9 +145,9 @@ class GoogleMapController {
       this.userMarker.addListener('click', () => {
         if (this.infoWindow) {
           this.infoWindow.setContent(`
-            <div style="color:#0f172a; padding:6px 10px; font-family:sans-serif;">
+            <div style="color:#4a3525; padding:6px 10px; font-family:sans-serif;">
               <strong style="font-size:13px;">📍 ${loc.name}</strong>
-              <div style="font-size:11px; color:#64748b; margin-top:2px;">Your Current GPS Location in Seochon</div>
+              <div style="font-size:11px; color:#8d7b68; margin-top:2px;">Your Current GPS Location in Seochon</div>
             </div>
           `);
           this.infoWindow.open(this.map, this.userMarker);
@@ -181,7 +166,6 @@ class GoogleMapController {
 
     programs.forEach(prog => {
       const isMaking = prog.category === 'making';
-      const pinColor = isMaking ? '#f59e0b' : '#0d9488'; // Amber for Making, Teal for Experience
       const categoryLabel = isMaking ? 'Making (제작)' : 'Experience (경험)';
       const iconEmoji = prog.categoryIcon || (isMaking ? '🏺' : '🍵');
 
@@ -189,7 +173,7 @@ class GoogleMapController {
       const distance = gpsManager.calculateDistance(userLoc.lat, userLoc.lng, prog.location.lat, prog.location.lng);
       const formattedDist = gpsManager.formatDistance(distance);
 
-      // Create Custom Styled SVG Pin for Google Maps
+      // Create Custom Styled 9SEOUL Yellow-Brown Gradient Pin
       const marker = new google.maps.Marker({
         position: { lat: prog.location.lat, lng: prog.location.lng },
         map: this.map,
@@ -200,11 +184,15 @@ class GoogleMapController {
           url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
             <svg xmlns="http://www.w3.org/2000/svg" width="44" height="52" viewBox="0 0 44 52">
               <defs>
+                <linearGradient id="pinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f4c724"/>
+                  <stop offset="100%" stop-color="#4a3525"/>
+                </linearGradient>
                 <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.6"/>
+                  <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.35"/>
                 </filter>
               </defs>
-              <path d="M22 0C9.85 0 0 9.85 0 22C0 36.5 22 52 22 52C22 52 44 36.5 44 22C44 9.85 34.15 0 22 0Z" fill="${pinColor}" filter="url(#shadow)" stroke="#ffffff" stroke-width="2"/>
+              <path d="M22 0C9.85 0 0 9.85 0 22C0 36.5 22 52 22 52C22 52 44 36.5 44 22C44 9.85 34.15 0 22 0Z" fill="url(#pinGrad)" filter="url(#shadow)" stroke="#ffffff" stroke-width="2"/>
               <circle cx="22" cy="20" r="14" fill="#ffffff" fill-opacity="0.95"/>
               <text x="22" y="25" font-size="14" text-anchor="middle" font-family="sans-serif">${iconEmoji}</text>
             </svg>
