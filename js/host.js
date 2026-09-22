@@ -72,6 +72,7 @@ const HOST_PORTAL = (() => {
       venueName: p.venueName, address: p.venueAddress,
       lat: parseFloat(p.lat) || 37.5800, lng: parseFloat(p.lng) || 126.9700,
       priceKrw: parseInt(p.priceKrw, 10) || 50000, priceUsd: parseInt(p.priceUsd, 10) || 38,
+      minGuests: parseInt(p.minGuests, 10) || 2, maxGuests: parseInt(p.maxGuests, 10) || 8,
       durationMinutes: parseInt(p.duration, 10) || 90,
       imageUrl: images[0], images,
       nextSlot: p.slots && p.slots[0] ? `Today ${p.slots[0].time}` : 'Today 15:00',

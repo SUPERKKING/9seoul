@@ -292,7 +292,25 @@ class MobileApp {
     document.getElementById('hp-btn-program-submit')?.addEventListener('click', () => {
       const msgEl = document.getElementById('hp-program-msg');
       const slots = [...document.querySelectorAll('.pf-slot-row')].map((row, i) => ({ id:`s-${Date.now()}-${i}`, time: row.querySelector('.pf-slot-time')?.value||'15:00', available: parseInt(row.querySelector('.pf-slot-spots')?.value,10)||6, max: parseInt(row.querySelector('.pf-slot-spots')?.value,10)||6 }));
-      const result = HOST_PORTAL.submitProgram({ titleKo: document.getElementById('pf-title-ko').value.trim(), titleEn: document.getElementById('pf-title-en').value.trim(), category: document.getElementById('pf-category').value, priceKrw: document.getElementById('pf-price-krw').value, priceUsd: document.getElementById('pf-price-usd').value, venueName: document.getElementById('pf-venue-name').value.trim(), venueAddress: document.getElementById('pf-venue-address').value.trim(), moodImageBase64, descriptionFull: document.getElementById('pf-desc-full').value.trim(), descriptionKo: document.getElementById('pf-desc-ko').value.trim(), detailImages: detailImages.filter(Boolean), descriptionDetail: document.getElementById('pf-desc-detail').value.trim(), inclusions: document.getElementById('pf-inclusions').value.trim(), extraSections:[...extraSections], slots });
+      const result = HOST_PORTAL.submitProgram({
+        titleKo: document.getElementById('pf-title-ko').value.trim(),
+        titleEn: document.getElementById('pf-title-en').value.trim(),
+        category: document.getElementById('pf-category').value,
+        priceKrw: document.getElementById('pf-price-krw').value,
+        priceUsd: document.getElementById('pf-price-usd').value,
+        minGuests: document.getElementById('pf-min-guests')?.value || 2,
+        maxGuests: document.getElementById('pf-max-guests')?.value || 8,
+        venueName: document.getElementById('pf-venue-name').value.trim(),
+        venueAddress: document.getElementById('pf-venue-address').value.trim(),
+        moodImageBase64,
+        descriptionFull: document.getElementById('pf-desc-full').value.trim(),
+        descriptionKo: document.getElementById('pf-desc-ko').value.trim(),
+        detailImages: detailImages.filter(Boolean),
+        descriptionDetail: document.getElementById('pf-desc-detail').value.trim(),
+        inclusions: document.getElementById('pf-inclusions').value.trim(),
+        extraSections:[...extraSections],
+        slots
+      });
       if (result.ok) { msgEl.textContent='제출 완료! 9SEOUL 심사 후 승인됩니다 ✅'; msgEl.className='hp-msg success'; setTimeout(()=>{this.hpShowScreen('hp-host-dashboard');this.hpRefreshDashboard();},1200); }
       else { msgEl.textContent=result.msg; msgEl.className='hp-msg error'; }
     });
@@ -362,6 +380,8 @@ class MobileApp {
   }
   hpResetProgramForm() {
     ['pf-title-ko','pf-title-en','pf-price-krw','pf-price-usd','pf-venue-name','pf-venue-address','pf-desc-full','pf-desc-ko','pf-desc-detail','pf-inclusions'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const minG = document.getElementById('pf-min-guests'); if(minG) minG.value='2';
+    const maxG = document.getElementById('pf-max-guests'); if(maxG) maxG.value='8';
     ['pf-mood-preview','pf-detail-previews','pf-extra-sections'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
     const msgEl=document.getElementById('hp-program-msg'); if(msgEl)msgEl.textContent='';
     document.getElementById('pf-category').value='experience';
@@ -1230,6 +1250,13 @@ class MobileApp {
     document.getElementById('detail-modal-price-krw').textContent = `₩${prog.pricing.krw.toLocaleString()}`;
     document.getElementById('detail-modal-price-usd').textContent = `($${prog.pricing.usd} USD)`;
 
+    // Minimum Guests Policy Notice
+    const minG = prog.minGuests || 2;
+    const minGEl = document.getElementById('detail-min-guests-num');
+    const minGInlineEl = document.getElementById('detail-min-guests-num-inline');
+    if (minGEl) minGEl.textContent = minG;
+    if (minGInlineEl) minGInlineEl.textContent = minG;
+
     document.getElementById('detail-btn-open-checkout').onclick = () => {
       this.closeSheet('detail-modal');
       this.openBookingCheckout(prog);
@@ -1248,6 +1275,10 @@ class MobileApp {
     this.activeProgram = prog;
     this.bookingGuests = 1;
     document.getElementById('booking-guest-count').textContent = '1';
+
+    const minG = prog.minGuests || 2;
+    const coMinGEl = document.getElementById('checkout-min-guests-num');
+    if (coMinGEl) coMinGEl.textContent = minG;
 
     document.getElementById('checkout-prog-thumb').src = prog.images[0];
     document.getElementById('checkout-prog-title').textContent = prog.title;

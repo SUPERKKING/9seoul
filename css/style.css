@@ -3267,3 +3267,71 @@ button, input, select, textarea {
 
 /* ─── Misc ─── */
 .hidden { display: none !important; }
+
+/* ─── Minimum Guests & Policy Notices ─── */
+.min-guests-notice-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 10px;
+}
+.min-notice-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.min-notice-icon {
+  font-size: 16px;
+}
+.min-notice-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+.min-notice-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.checkout-min-notice {
+  background: rgba(245, 158, 11, 0.09);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 12px 0 6px;
+}
+.cmn-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+.cmn-text {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.hp-policy-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.hp-policy-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}

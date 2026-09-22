@@ -83,6 +83,8 @@ class AdminProgramManager {
         usd: parseInt(programData.priceUsd, 10) || 35
       },
       durationMinutes: parseInt(programData.durationMinutes, 10) || 90,
+      minGuests: parseInt(programData.minGuests, 10) || 2,
+      maxGuests: parseInt(programData.maxGuests, 10) || 8,
       rating: 5.0,
       reviewCount: 1,
       images: [

@@ -535,6 +535,19 @@
               <h4>Select Available Slot</h4>
               <div class="sheet-slots-grid" id="detail-modal-slots"></div>
             </div>
+
+            <!-- Minimum Participants & Refund Notice -->
+            <div class="sheet-block min-guests-notice-box" id="detail-min-guests-box">
+              <div class="min-notice-header">
+                <span class="min-notice-icon">👥</span>
+                <strong class="min-notice-title">최소 진행 인원: <span id="detail-min-guests-num">2</span>명</strong>
+              </div>
+              <p class="min-notice-desc">
+                • 본 프로그램은 최소 <strong><span id="detail-min-guests-num-inline">2</span>명 이상</strong> 모객 시 최종 진행이 확정됩니다.<br/>
+                • 최소 인원 미달 시 프로그램이 부득이하게 취소될 수 있습니다.<br/>
+                • 취소될 경우 결제하신 금액은 <strong>100% 전액 자동 취소 및 환불</strong>됩니다.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -579,6 +592,15 @@
               <p>🗓️ Today at <strong id="checkout-slot-time">15:30</strong></p>
               <p>📍 <span id="checkout-venue-name">Venue</span></p>
             </div>
+          </div>
+
+          <!-- Minimum Guests & Cancellation / Refund Policy Notice -->
+          <div class="checkout-min-notice">
+            <div class="cmn-badge">⚠️ 최소 인원 안내 / Policy</div>
+            <p class="cmn-text">
+              본 프로그램은 최소 <strong><span id="checkout-min-guests-num">2</span>명</strong> 모객 시 확정 진행됩니다. 
+              최소 인원 미달로 취소될 경우, <strong>결제 금액은 전액 자동 취소 및 환불</strong>됩니다.
+            </p>
           </div>
 
           <div class="m-check-row">
@@ -974,6 +996,20 @@
               <label>금액 (USD)</label>
               <input type="number" id="pf-price-usd" placeholder="38" min="0" />
             </div>
+          </div>
+          <div class="hp-field-row">
+            <div class="hp-field">
+              <label>최소 진행 인원 (명)</label>
+              <input type="number" id="pf-min-guests" placeholder="2" value="2" min="1" max="50" />
+            </div>
+            <div class="hp-field">
+              <label>최대 모집 인원 (명)</label>
+              <input type="number" id="pf-max-guests" placeholder="8" value="8" min="1" max="50" />
+            </div>
+          </div>
+          <div class="hp-policy-box">
+            <span class="hp-policy-icon">ℹ️</span>
+            <small>최소 인원 미달 시 프로그램이 취소될 수 있으며, 예약자에게 결제 금액이 <strong>전액 100% 자동 환불(취소)</strong> 처리됩니다.</small>
           </div>
         </div>
 
