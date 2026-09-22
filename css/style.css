@@ -495,24 +495,43 @@ button, input, select, textarea {
   letter-spacing: 0.6px;
 }
 
-.header-avatar-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 50%;
-  background: var(--color-insta-gradient);
-  display: flex;
+.header-auth-btn {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.header-avatar-btn img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ffffff;
+.header-auth-btn:hover {
+  border-color: #e11d48;
+  color: #e11d48;
+  transform: translateY(-1px);
+}
+
+.header-auth-btn .auth-heart-icon {
+  font-size: 14px;
+  color: #e11d48;
+  line-height: 1;
+}
+
+.header-auth-btn.logged-in {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.header-avatar-btn {
+  display: none;
 }
 
 /* Real-time GPS Bar */
@@ -2172,11 +2191,17 @@ button, input, select, textarea {
   margin-bottom: 16px;
 }
 
-.profile-avatar-row img {
-  width: 54px;
-  height: 54px;
+.profile-avatar-row img,
+.profile-heart-avatar {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  border: 2.5px solid #e11d48;
+  border: 2px solid #fecdd3;
+  background: #fff1f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
 .profile-avatar-row h3 {

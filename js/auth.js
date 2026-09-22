@@ -10,75 +10,39 @@ class AuthManager {
     this.listeners = [];
   }
 
+  getGuestUser() {
+    return {
+      isLoggedIn: false,
+      id: null,
+      name: "게스트",
+      email: "",
+      avatar: "",
+      nationality: "Global",
+      preferredCurrency: "KRW",
+      preferredLanguage: "KO",
+      savedWishlist: [],
+      bookedExperiences: []
+    };
+  }
+
   loadUser() {
     try {
       const saved = localStorage.getItem(this.storageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.name) return parsed;
+        // Discard legacy dummy profile "Alex Johnson"
+        if (parsed && parsed.name === "Alex Johnson") {
+          localStorage.removeItem(this.storageKey);
+          return this.getGuestUser();
+        }
+        if (parsed && typeof parsed.isLoggedIn === 'boolean') {
+          return parsed;
+        }
       }
     } catch (e) {
       console.warn("Failed to load user state", e);
     }
-
-    // Default Preloaded Traveler Profile with Active Passes for Instant Testing
-    return {
-      isLoggedIn: true,
-      id: "google_10829371289",
-      name: "Alex Johnson",
-      email: "alex.traveler@gmail.com",
-      avatar: "avatar_art.jpg",
-      nationality: "United States 🇺🇸",
-      preferredCurrency: "USD",
-      preferredLanguage: "EN",
-      savedWishlist: ["prog-1", "prog-2", "prog-4"],
-      bookedExperiences: [
-        {
-          bookingId: "9S-892104",
-          programId: "prog-1",
-          programTitle: "Seochon Hanok Mindful Tea Ceremony & Heritage House Tour",
-          programTitleKo: "서촌 100년 고택 한옥 다도 및 명상 체험",
-          category: "experience",
-          categoryLabel: "Experience (경험)",
-          programImage: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=800",
-          venueName: "Nuha-dong Hanok Pavilion (Jaha Tea House)",
-          venueAddress: "24 Jahamun-ro 7-gil, Jongno-gu, Seoul",
-          hostName: "Master Sun-hee Park",
-          date: "Today",
-          slotTime: "15:30",
-          guests: 2,
-          paymentMethod: "google_pay",
-          currency: "USD",
-          totalPaid: "$68 USD",
-          distanceText: "140m away",
-          destinationLat: 37.5802,
-          destinationLng: 126.9698,
-          createdAt: new Date().toISOString()
-        },
-        {
-          bookingId: "9S-451820",
-          programId: "prog-2",
-          programTitle: "Joseon White Porcelain (Baekja) Wheel Pottery Workshop",
-          programTitleKo: "조선 백자 물레 성형 & 도예 컵/화병 제작 클래스",
-          category: "making",
-          categoryLabel: "Making (제작)",
-          programImage: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800",
-          venueName: "Clay & Soul Atelier Seochon",
-          venueAddress: "18 Pirundae-ro, Jongno-gu, Seoul",
-          hostName: "Ceramist Min-woo Kang",
-          date: "Tomorrow",
-          slotTime: "16:00",
-          guests: 1,
-          paymentMethod: "google_pay",
-          currency: "USD",
-          totalPaid: "$52 USD",
-          distanceText: "320m away",
-          destinationLat: 37.5768,
-          destinationLng: 126.9679,
-          createdAt: new Date().toISOString()
-        }
-      ]
-    };
+    return this.getGuestUser();
   }
 
   saveUser() {
@@ -103,15 +67,15 @@ class AuthManager {
     if (!profile) {
       profile = {
         isLoggedIn: true,
-        id: `google_${Date.now()}`,
-        name: "Alex Johnson",
-        email: "alex.traveler@gmail.com",
-        avatar: "avatar_art.jpg",
-        nationality: "United States 🇺🇸",
-        preferredCurrency: "USD",
-        preferredLanguage: "EN",
-        savedWishlist: ["prog-1", "prog-2", "prog-4"],
-        bookedExperiences: this.currentUser?.bookedExperiences || []
+        id: `user_${Date.now()}`,
+        name: "9SEOUL 회원",
+        email: "member@9seoul.com",
+        avatar: "",
+        nationality: "Korea 🇰🇷",
+        preferredCurrency: "KRW",
+        preferredLanguage: "KO",
+        savedWishlist: [],
+        bookedExperiences: []
       };
     }
     this.currentUser = profile;
@@ -120,18 +84,7 @@ class AuthManager {
   }
 
   signOut() {
-    this.currentUser = {
-      isLoggedIn: false,
-      id: null,
-      name: "Guest Explorer",
-      email: "",
-      avatar: "",
-      nationality: "Global",
-      preferredCurrency: "USD",
-      preferredLanguage: "EN",
-      savedWishlist: [],
-      bookedExperiences: []
-    };
+    this.currentUser = this.getGuestUser();
     this.saveUser();
     return this.currentUser;
   }

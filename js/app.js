@@ -476,10 +476,27 @@ class MobileApp {
   }
 
   updateAuthUI(user) {
-    const authAvatar = document.getElementById('auth-user-avatar');
-    if (authAvatar && user.avatar) {
-      authAvatar.src = user.avatar;
+    user = user || authManager.currentUser;
+    const btnAuth = document.getElementById('btn-auth-profile');
+    const iconEl = document.getElementById('header-auth-icon');
+    const textEl = document.getElementById('header-auth-text');
+
+    if (user && user.isLoggedIn) {
+      if (btnAuth) {
+        btnAuth.classList.add('logged-in');
+        btnAuth.title = '회원정보';
+      }
+      if (iconEl) iconEl.textContent = '❤️';
+      if (textEl) textEl.textContent = user.name || '내 정보';
+    } else {
+      if (btnAuth) {
+        btnAuth.classList.remove('logged-in');
+        btnAuth.title = '로그인';
+      }
+      if (iconEl) iconEl.textContent = '♡';
+      if (textEl) textEl.textContent = '로그인';
     }
+
     const passesCountEl = document.getElementById('profile-passes-count');
     const wishlistCountEl = document.getElementById('profile-wishlist-count');
 
@@ -1454,16 +1471,20 @@ class MobileApp {
   // Google Auth Profile Modal
   openAuthModal() {
     const user = authManager.currentUser;
-    if (user.isLoggedIn) {
+    if (user && user.isLoggedIn) {
       document.getElementById('auth-profile-section').classList.remove('hidden');
       document.getElementById('auth-login-section').classList.add('hidden');
-      document.getElementById('profile-avatar-large').src = user.avatar;
-      document.getElementById('profile-name-large').textContent = user.name;
-      document.getElementById('profile-email-large').textContent = user.email;
-      document.getElementById('profile-nationality').textContent = user.nationality;
+      const nameEl = document.getElementById('profile-name-large');
+      const emailEl = document.getElementById('profile-email-large');
+      const natEl = document.getElementById('profile-nationality');
+      if (nameEl) nameEl.textContent = user.name || '회원님';
+      if (emailEl) emailEl.textContent = user.email || '';
+      if (natEl) natEl.textContent = user.nationality || '9SEOUL Member';
 
       document.getElementById('btn-sign-out').onclick = () => {
         authManager.signOut();
+        this.updateAuthUI();
+        this.renderPassesTab();
         this.closeSheet('auth-modal');
       };
     } else {
@@ -1471,6 +1492,8 @@ class MobileApp {
       document.getElementById('auth-login-section').classList.remove('hidden');
       document.getElementById('btn-google-signin-action').onclick = () => {
         authManager.signInWithGoogle();
+        this.updateAuthUI();
+        this.renderPassesTab();
         this.closeSheet('auth-modal');
       };
     }
