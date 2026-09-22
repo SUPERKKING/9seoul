@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>9SEOUL | Curated Cultural & Art Experiences</title>
+  <meta name="description" content="9SEOUL - Curated Korean cultural and art experiences in historic Seoul. Hanok tea ceremonies, pottery making, Google Maps walking navigation, and mobile passes." />
+
+  <!-- Mobile App Manifest & Web App Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Google Fonts: Outfit, Plus Jakarta Sans, Noto Serif KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Google Maps JavaScript API -->
+  <script src="https://maps.googleapis.com/maps/api/js?loading=async&libraries=geometry"></script>
+
+  <!-- Main Mobile App Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="mobile-app-body">
+  <!-- Outer Mobile Device Shell (Framed on Desktop, 100% on Mobile) -->
+  <div class="mobile-device-shell">
+
+    <!-- ================= 9SEOUL SPLASH & LANGUAGE ONBOARDING OVERLAY ================= -->
+    <div class="splash-onboarding-overlay" id="splash-onboarding-screen">
+      
+      <!-- Screen 1: 9SEOUL Logo Cinematic Action -->
+      <div class="splash-screen-logo-action active" id="splash-logo-screen">
+        <div class="splash-brand-hero">
+          <div class="splash-emblem-ring">
+            <span class="splash-nine-text">9</span>
+          </div>
+          <h1 class="splash-logo-title">9SEOUL</h1>
+          <p class="splash-logo-tagline">Curated Cultural & Art Journey in Seoul</p>
+        </div>
+
+        <div class="splash-touch-prompt">
+          <span class="touch-pulse-ring"></span>
+          <span class="touch-text">Touch to Explore</span>
+          <span class="touch-subtext">터치하여 시작하기</span>
+        </div>
+      </div>
+
+      <!-- Screen 2: Interactive Language Selection Screen -->
+      <div class="splash-screen-language" id="splash-language-screen">
+        <div class="lang-selection-header">
+          <div class="lang-brand-mini">
+            <span class="nine-chip">9</span>
+            <strong>9SEOUL</strong>
+          </div>
+          <h2>Select Your Language</h2>
+          <p>언어를 선택해 주세요 • 言語を選択 • 选择语言</p>
+        </div>
+
+        <div class="lang-grid-options">
+          <button class="lang-option-card active" data-lang="EN" onclick="selectLangDirect('EN', this)">
+            <span class="lang-flag">🇺🇸</span>
+            <div class="lang-labels">
+              <strong>English</strong>
+              <small>Default Language</small>
+            </div>
+            <span class="lang-check">✓</span>
+          </button>
+
+          <button class="lang-option-card" data-lang="KO" onclick="selectLangDirect('KO', this)">
+            <span class="lang-flag">🇰🇷</span>
+            <div class="lang-labels">
+              <strong>한국어</strong>
+              <small>Korean</small>
+            </div>
+            <span class="lang-check">✓</span>
+          </button>
+
+          <button class="lang-option-card" data-lang="JA" onclick="selectLangDirect('JA', this)">
+            <span class="lang-flag">🇯🇵</span>
+            <div class="lang-labels">
+              <strong>日本語</strong>
+              <small>Japanese</small>
+            </div>
+            <span class="lang-check">✓</span>
+          </button>
+
+          <button class="lang-option-card" data-lang="ZH" onclick="selectLangDirect('ZH', this)">
+            <span class="lang-flag">🇨🇳</span>
+            <div class="lang-labels">
+              <strong>中文 (简体)</strong>
+              <small>Chinese</small>
+            </div>
+            <span class="lang-check">✓</span>
+          </button>
+        </div>
+
+        <button class="btn-start-9seoul" id="btn-confirm-language" onclick="confirmLangDirect()">
+          🚀 Start 9SEOUL Experience
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Inline Guaranteed Fast Splash & Language Action Script -->
+    <script>
+      let selectedLang = localStorage.getItem('9seoul_lang') || 'EN';
+
+      function handleSplashTouch() {
+        const logoScreen = document.getElementById('splash-logo-screen');
+        const langScreen = document.getElementById('splash-language-screen');
+        if (logoScreen && langScreen) {
+          logoScreen.style.transform = 'scale(0.95)';
+          logoScreen.style.opacity = '0';
+          setTimeout(() => {
+            logoScreen.classList.remove('active');
+            logoScreen.style.transform = '';
+            logoScreen.style.opacity = '';
+            langScreen.classList.add('active');
+          }, 180);
+        }
+      }
+
+      function selectLangDirect(lang, btn) {
+        selectedLang = lang;
+        document.querySelectorAll('.lang-option-card').forEach(c => c.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+      }
+
+      function confirmLangDirect() {
+        localStorage.setItem('9seoul_lang', selectedLang);
+        if (window.seochonApp && window.seochonApp.applyLanguage) {
+          window.seochonApp.applyLanguage(selectedLang);
+        }
+        const overlay = document.getElementById('splash-onboarding-screen');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          setTimeout(() => { overlay.style.display = 'none'; }, 350);
+        }
+      }
+
+      // Bind direct touch and click immediately
+      document.addEventListener('DOMContentLoaded', () => {
+        const logoScreen = document.getElementById('splash-logo-screen');
+        if (logoScreen) {
+          logoScreen.onclick = handleSplashTouch;
+        }
+      });
+      // Also try immediately
+      const logoEl = document.getElementById('splash-logo-screen');
+      if (logoEl) logoEl.onclick = handleSplashTouch;
+    </script>
+    
+    <!-- Mobile Status Bar (Simulated Time / 5G / Battery) -->
+    <div class="mobile-status-bar">
+      <span class="status-time" id="app-clock">09:41</span>
+      <div class="status-icons">
+        <span class="status-signal">5G</span>
+        <span class="status-battery">100%</span>
+      </div>
+    </div>
+
+    <!-- Mobile App Top Header (9SEOUL Brand) -->
+    <header class="mobile-app-header">
+      <div class="header-top-row">
+        <div class="brand-badge-mobile">
+          <div class="hanok-badge-icon">9</div>
+          <div class="brand-text-mobile">
+            <h2>9SEOUL</h2>
+            <small id="header-brand-subtitle">Cultural Experience App</small>
+          </div>
+        </div>
+
+        <div class="header-right-tools">
+          <button class="header-lang-btn" id="btn-quick-lang-toggle" title="Change Language">
+            <span id="current-lang-flag">🇺🇸</span>
+            <strong id="current-lang-code">EN</strong>
+          </button>
+
+          <button class="header-avatar-btn" id="btn-auth-profile" title="My Google Profile">
+            <img id="auth-user-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="Avatar" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time GPS Location Pill & Quick Simulator -->
+      <div class="mobile-gps-bar">
+        <div class="gps-pill-main">
+          <span class="gps-dot-pulse live" id="gps-status-dot"></span>
+          <span class="gps-tag">GPS</span>
+          <select id="gps-simulator-select" class="mobile-gps-select" title="Change GPS Location in Seochon">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+        <button id="btn-use-live-gps" class="btn-mobile-live-gps" title="Sync live browser GPS">
+          📡 Live GPS
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Mobile Content Area (Tab-based SPA) -->
+    <main class="mobile-main-container">
+
+      <!-- ================= TAB 1: EXPLORE (탐색) ================= -->
+      <section class="tab-view active" id="tab-explore">
+        <!-- Search & Filter Area -->
+        <div class="explore-search-section">
+          <div class="mobile-search-box">
+            <span class="search-ico">🔍</span>
+            <input type="text" id="search-input" placeholder="Search tea, pottery, art gallery, walk..." />
+          </div>
+
+          <!-- STRICT 2 CATEGORIES: Experience & Making -->
+          <div class="mobile-category-scroll">
+            <button class="category-filter-btn active" data-category="all" id="btn-cat-all">
+              <span class="btn-emoji">✨</span> <span id="label-cat-all">All</span>
+            </button>
+            <button class="category-filter-btn btn-cat-experience" data-category="experience" id="btn-cat-exp">
+              <span class="btn-emoji">🍵</span> <span id="label-cat-exp">Experience</span>
+            </button>
+            <button class="category-filter-btn btn-cat-making" data-category="making" id="btn-cat-make">
+              <span class="btn-emoji">🏺</span> <span id="label-cat-make">Making</span>
+            </button>
+          </div>
+
+          <!-- Sort Bar -->
+          <div class="mobile-sort-row">
+            <span class="sort-meta-text" id="results-count-badge">8 spaces available</span>
+            <div class="mobile-sort-select-wrap">
+              <select id="sort-selector" class="mobile-sort-select">
+                <option value="nearest" id="opt-sort-nearest">📍 Nearest (GPS Distance)</option>
+                <option value="fastest" id="opt-sort-fastest">⚡ Fastest Booking</option>
+                <option value="rating" id="opt-sort-rating">⭐ Top Rated</option>
+                <option value="price" id="opt-sort-price">💰 Price: Low to High</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience Cards Feed -->
+        <div class="mobile-cards-feed" id="programs-grid">
+          <!-- Populated by app.js -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: MAP & GPS RADAR (지도 / 길찾기) ================= -->
+      <section class="tab-view" id="tab-map">
+        <div class="mobile-map-container">
+          <!-- Floating Category Filter on Map -->
+          <div class="map-floating-categories">
+            <button class="map-cat-chip active" data-category="all">All</button>
+            <button class="map-cat-chip exp" data-category="experience">🍵 Experience</button>
+            <button class="map-cat-chip make" data-category="making">🏺 Making</button>
+          </div>
+
+          <!-- Floating GPS Re-center Button -->
+          <button class="map-fab-recenter" id="btn-map-recenter" title="Re-center to my GPS">
+            🎯
+          </button>
+
+          <!-- Fullscreen Google Map Container -->
+          <div id="seochon-map" class="google-map-app-canvas"></div>
+
+          <!-- Floating Horizontal Snap Carousel for Programs on Map -->
+          <div class="map-floating-carousel" id="map-carousel-container">
+            <!-- Dynamically populated with compact swipeable cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: MY PASSES & STAMP PASSPORT ================= -->
+      <section class="tab-view" id="tab-passes">
+        <div class="passes-view-header">
+          <h3 id="passes-main-heading">🎟️ My Mobile Wallet & Passport</h3>
+          <p id="passes-main-sub">Confirmed reservations, QR passes & Cultural Stamps</p>
+        </div>
+
+        <!-- Interactive 9SEOUL Cultural Stamp Tour Passport Widget -->
+        <div class="stamp-passport-card">
+          <div class="passport-header">
+            <div class="passport-title-wrap">
+              <span class="passport-flag">🇰🇷</span>
+              <div>
+                <h4>9SEOUL STAMP PASSPORT</h4>
+                <small>Collect 4 Stamps for 10% Welcome Gift</small>
+              </div>
+            </div>
+            <span class="passport-progress-pill" id="stamp-progress-badge">2 / 4 Stamps</span>
+          </div>
+
+          <div class="passport-stamps-grid" id="stamp-tour-grid">
+            <!-- Dynamically populated with stamps -->
+          </div>
+
+          <div class="passport-reward-bar">
+            <span>🎁 Reward Unlocked:</span>
+            <strong>10% Off Craft Workshop + Free Korean Tea Set</strong>
+          </div>
+        </div>
+
+        <div class="passes-cards-list" id="my-passes-list">
+          <!-- Populated dynamically with Apple Wallet style passes -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: HOST MODE (호스트 등록) ================= -->
+      <section class="tab-view" id="tab-host">
+        <div class="host-view-header">
+          <h3 id="host-main-heading">🏛️ Host & Master Atelier</h3>
+          <p id="host-main-sub">Register a new cultural space or craft workshop in Seoul</p>
+        </div>
+
+        <form id="host-program-form" class="mobile-host-form">
+          <div class="m-form-group">
+            <label>Program Title (English) *</label>
+            <input type="text" name="title" required placeholder="e.g. Traditional Hanok Woodblock Workshop" />
+          </div>
+
+          <div class="m-form-group">
+            <label>Program Title (Korean) *</label>
+            <input type="text" name="titleKo" required placeholder="예: 전통 한옥 목판화 & 민화 체험" />
+          </div>
+
+          <!-- STRICTLY EXPERIENCE OR MAKING -->
+          <div class="m-form-group">
+            <label>Category (체험 카테고리) *</label>
+            <select name="category" required class="m-select">
+              <option value="experience">🍵 Experience (경험 - 다도, 갤러리 투어, 산책, 테이스팅)</option>
+              <option value="making">🏺 Making (제작 - 도예, 수제 도장, 자개 공예, 판화)</option>
+            </select>
+          </div>
+
+          <div class="m-form-row-2">
+            <div class="m-form-group">
+              <label>Duration (Mins) *</label>
+              <input type="number" name="durationMinutes" value="90" required />
+            </div>
+            <div class="m-form-group">
+              <label>Host Name *</label>
+              <input type="text" name="hostName" required placeholder="Master Artisan" />
+            </div>
+          </div>
+
+          <div class="m-form-group">
+            <label>Space Name & Address (Seoul) *</label>
+            <input type="text" name="venueName" required placeholder="Space name (e.g. 9SEOUL Art Loft)" />
+            <input type="text" name="address" required placeholder="Address (e.g. 24 Jahamun-ro, Jongno-gu)" style="margin-top:6px;" />
+          </div>
+
+          <div class="m-form-row-2">
+            <div class="m-form-group">
+              <label>Price (KRW ₩) *</label>
+              <input type="number" name="priceKrw" value="50000" step="1000" required />
+            </div>
+            <div class="m-form-group">
+              <label>Price (USD $) *</label>
+              <input type="number" name="priceUsd" value="38" required />
+            </div>
+          </div>
+
+          <div class="m-form-row-2">
+            <div class="m-form-group">
+              <label>Latitude *</label>
+              <input type="number" step="0.0001" name="lat" value="37.5802" required />
+            </div>
+            <div class="m-form-group">
+              <label>Longitude *</label>
+              <input type="number" step="0.0001" name="lng" value="126.9698" required />
+            </div>
+          </div>
+
+          <div class="m-form-group">
+            <label>Cover Photo URL</label>
+            <input type="url" name="imageUrl" value="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=800" />
+          </div>
+
+          <div class="m-form-group">
+            <label>English Description Summary *</label>
+            <textarea name="summary" rows="3" required placeholder="Engaging description for foreign visitors..."></textarea>
+          </div>
+
+          <div class="m-form-group">
+            <label>Korean Description Summary *</label>
+            <textarea name="summaryKo" rows="2" required placeholder="한국어 프로그램 요약..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-mobile-submit">
+            🚀 Publish Experience to 9SEOUL Map
+          </button>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- ================= BOTTOM NAVIGATION BAR (NATIVE APP TAB BAR) ================= -->
+    <nav class="mobile-bottom-nav">
+      <button class="nav-tab-item active" data-tab="tab-explore">
+        <span class="tab-icon">🧭</span>
+        <span class="tab-label" id="tab-label-explore">Explore</span>
+      </button>
+      <button class="nav-tab-item" data-tab="tab-map">
+        <span class="tab-icon">🗺️</span>
+        <span class="tab-label" id="tab-label-map">Map & GPS</span>
+      </button>
+      <button class="nav-tab-item" data-tab="tab-passes">
+        <span class="tab-icon">🎟️</span>
+        <span class="tab-label" id="tab-label-passes">My Passes</span>
+        <span class="badge-dot" id="passes-badge-dot"></span>
+      </button>
+      <button class="nav-tab-item" data-tab="tab-host">
+        <span class="tab-icon">➕</span>
+        <span class="tab-label" id="tab-label-host">Host</span>
+      </button>
+    </nav>
+
+    <!-- ================= MOBILE BOTTOM SHEETS & DRAWERS ================= -->
+
+    <!-- 1. Experience Detail Bottom Sheet (iOS Style) -->
+    <div class="mobile-bottom-sheet" id="detail-modal">
+      <div class="sheet-backdrop"></div>
+      <div class="sheet-panel detail-full-panel">
+        <div class="detail-floating-nav">
+          <button class="btn-detail-back" id="detail-back-btn" title="Back">
+            <span class="back-arrow">←</span>
+            <span class="back-text">뒤로가기</span>
+          </button>
+          <div class="detail-nav-actions">
+            <button class="btn-detail-icon-action" id="detail-nav-wishlist" title="Save">🤍</button>
+            <button class="btn-detail-icon-action" id="detail-nav-close" title="Close">✕</button>
+          </div>
+        </div>
+
+        <div class="sheet-drag-handle"></div>
+
+        <div class="sheet-scroll-body">
+          <div class="sheet-gallery" id="detail-modal-gallery"></div>
+
+          <div class="sheet-content">
+            <div class="sheet-meta-badges" id="detail-modal-category"></div>
+            <h2 class="sheet-title" id="detail-modal-title">Title</h2>
+            <p class="sheet-title-ko" id="detail-modal-title-ko">한국어 제목</p>
+
+            <div class="sheet-rating" id="detail-modal-rating"></div>
+
+            <p class="sheet-summary" id="detail-modal-summary" style="font-size:13px;color:#cbd5e1;line-height:1.6;margin:8px 0 4px;"></p>
+            <p class="sheet-summary-ko" id="detail-modal-summary-ko" style="font-size:11px;color:#64748b;margin:0 0 12px;"></p>
+
+            <!-- AI Audio Docent Player Widget -->
+            <div class="sheet-audio-player-card" id="detail-audio-player">
+              <div class="audio-player-top">
+                <button class="btn-play-docent" id="btn-toggle-docent" title="Listen to 1-min Audio Docent">
+                  <span id="docent-play-icon">▶</span>
+                </button>
+                <div class="audio-track-info">
+                  <strong id="docent-title">🎧 1-Min Audio Docent & Hanok Soundscape</strong>
+                  <div class="audio-progress-bar">
+                    <div class="audio-progress-fill" id="docent-progress"></div>
+                  </div>
+                  <small id="docent-duration">0:00 / 0:58 • English Audio Docent</small>
+                </div>
+              </div>
+              <p class="audio-transcript" id="docent-transcript">
+                "Listen to the gentle spring water heating in the iron kettle as we prepare wild mountain green tea harvested from Mount Jirisan..."
+              </p>
+            </div>
+
+            <!-- Hangul Seal Engraving Simulator Widget -->
+            <div class="sheet-seal-simulator" id="detail-seal-simulator">
+              <div class="seal-sim-header">
+                <span class="seal-sim-badge">✨ Interactive Tool</span>
+                <h4>✍️ Preview Your Hangul Name Seal</h4>
+                <p>Type your English name to see how it looks hand-carved on Joseon stone:</p>
+              </div>
+              
+              <div class="seal-sim-input-row">
+                <input type="text" id="seal-name-input" placeholder="Type name (e.g. Alex, Emma, David)" value="Alex" />
+                <button class="btn-gen-seal" id="btn-generate-seal">Generate</button>
+              </div>
+
+              <div class="seal-quick-sample-chips">
+                <span class="chip-label">Try sample:</span>
+                <button class="sample-name-chip" data-name="Alex">Alex</button>
+                <button class="sample-name-chip" data-name="Emma">Emma</button>
+                <button class="sample-name-chip" data-name="Chloe">Chloe</button>
+                <button class="sample-name-chip" data-name="David">David</button>
+              </div>
+
+              <!-- Live Rendered Stamp Impression -->
+              <div class="seal-rendered-preview">
+                <div class="seal-stone-box">
+                  <div class="seal-red-ink-stamp" id="seal-preview-stamp">
+                    <span class="seal-hangul-text" id="seal-output-hangul">알렉스</span>
+                    <span class="seal-hanja-text" id="seal-output-hanja">雅樂斯</span>
+                  </div>
+                </div>
+                <div class="seal-meaning-box">
+                  <span class="meaning-label">Hangul & Hanja Meaning:</span>
+                  <strong id="seal-output-meaning">"Graceful Melody & Harmony"</strong>
+                  <small>Carved with safety chisels in 90 mins</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tourist Photo Reviews Feed -->
+            <div class="sheet-reviews-block">
+              <div class="reviews-header-row">
+                <h4>📸 Traveler Photo Reviews</h4>
+                <button class="btn-write-review" id="btn-open-review-form">＋ Add Review</button>
+              </div>
+              <div class="sheet-reviews-list" id="detail-reviews-container"></div>
+            </div>
+
+            <div class="sheet-host-card">
+              <img id="detail-modal-host-avatar" src="" alt="Host" />
+              <div class="sheet-host-info">
+                <span class="sheet-host-badge">Certified 9SEOUL Master</span>
+                <h4 id="detail-modal-host-name">Name</h4>
+                <p id="detail-modal-host-role">Role</p>
+                <small id="detail-modal-host-langs"></small>
+              </div>
+            </div>
+
+            <div class="sheet-block">
+              <h4>📍 Location</h4>
+              <p class="meta-venue-name" id="detail-modal-venue-name"></p>
+              <p class="meta-venue-addr" id="detail-modal-venue-address"></p>
+            </div>
+
+            <div class="sheet-block">
+              <h4>✨ What's Included</h4>
+              <ul class="sheet-inclusions" id="detail-modal-inclusions"></ul>
+            </div>
+
+            <div class="sheet-block">
+              <h4>Select Available Slot</h4>
+              <div class="sheet-slots-grid" id="detail-modal-slots"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sheet-sticky-footer">
+          <div class="sheet-price-col">
+            <span class="sheet-price-label" id="sheet-price-label">Per Guest</span>
+            <div class="sheet-price-vals">
+              <strong id="detail-modal-price-krw">₩45,000</strong>
+              <small id="detail-modal-price-usd">($34 USD)</small>
+            </div>
+          </div>
+          <div class="sheet-action-col">
+            <button class="btn-sheet-nav" id="detail-btn-nav-direct">
+              🗺️ Walk
+            </button>
+            <button class="btn-sheet-book" id="detail-btn-open-checkout">
+              ⚡ Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Booking & Express 1-Tap Checkout Sheet -->
+    <div class="mobile-bottom-sheet" id="checkout-modal">
+      <div class="sheet-backdrop"></div>
+      <div class="sheet-panel">
+        <div class="sheet-drag-handle"></div>
+        <button class="sheet-close-btn">&times;</button>
+
+        <div class="checkout-sheet-header">
+          <h3>9SEOUL Express Checkout</h3>
+          <p>Instant booking with Push Alert & Mobile Wallet QR Pass</p>
+        </div>
+
+        <div class="sheet-scroll-body checkout-padding">
+          <div class="checkout-summary-card">
+            <img id="checkout-prog-thumb" src="" alt="Thumbnail" />
+            <div>
+              <span class="m-cat-tag" id="checkout-prog-category">Experience</span>
+              <h4 id="checkout-prog-title">Title</h4>
+              <p>🗓️ Today at <strong id="checkout-slot-time">15:30</strong></p>
+              <p>📍 <span id="checkout-venue-name">Venue</span></p>
+            </div>
+          </div>
+
+          <div class="m-check-row">
+            <div>
+              <strong>Number of Guests</strong>
+              <small>Foreign travelers welcome (English included)</small>
+            </div>
+            <div class="m-stepper">
+              <button class="btn-step" id="booking-guest-minus">-</button>
+              <span id="booking-guest-count">1</span>
+              <button class="btn-step" id="booking-guest-plus">+</button>
+            </div>
+          </div>
+
+          <div class="m-check-row">
+            <div>
+              <strong>Currency</strong>
+              <small>Real-time conversion</small>
+            </div>
+            <div class="m-curr-toggle">
+              <button class="curr-opt active" id="curr-usd">$ USD</button>
+              <button class="curr-opt" id="curr-krw">₩ KRW</button>
+            </div>
+          </div>
+
+          <div class="m-pay-options">
+            <label class="m-pay-card active">
+              <input type="radio" name="payment_method" value="google_pay" checked />
+              <span>📱 Google Pay / Apple Pay (Express 1-Tap)</span>
+            </label>
+            <label class="m-pay-card">
+              <input type="radio" name="payment_method" value="international_card" />
+              <span>💳 Credit Card (Visa / MC / Amex)</span>
+            </label>
+          </div>
+
+          <div class="m-pricing-box">
+            <div class="m-price-line">
+              <span>Subtotal</span>
+              <span id="checkout-subtotal-amount">$34 USD</span>
+            </div>
+            <div class="m-price-line total">
+              <strong>Total</strong>
+              <strong id="checkout-total-amount" class="highlight">$34 USD</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="sheet-sticky-footer">
+          <button class="btn-mobile-pay-action" id="btn-complete-payment">
+            🔒 Pay & Confirm Pass
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Apple Wallet Style Ticket Pass Modal -->
+    <div class="mobile-bottom-sheet" id="ticket-pass-modal">
+      <div class="sheet-backdrop"></div>
+      <div class="sheet-panel pass-panel">
+        <button class="sheet-close-btn">&times;</button>
+        
+        <div class="mobile-pass-card">
+          <div class="pass-top">
+            <span class="pass-brand">9SEOUL PASS</span>
+            <span class="pass-confirmed">✅ CONFIRMED</span>
+            <span class="pass-code" id="pass-booking-id">9S-892104</span>
+          </div>
+
+          <div class="pass-middle">
+            <span class="pass-category" id="pass-category-badge">Experience (경험)</span>
+            <h3 id="pass-prog-title">Title</h3>
+            <p class="pass-title-ko" id="pass-prog-title-ko">한국어 제목</p>
+
+            <div class="pass-meta-grid">
+              <div>
+                <small>DATE & TIME</small>
+                <strong id="pass-slot-time">Today 15:30</strong>
+              </div>
+              <div>
+                <small>GUESTS</small>
+                <strong id="pass-guest-count">1 Traveler</strong>
+              </div>
+              <div>
+                <small>TOTAL PAID</small>
+                <strong id="pass-total-paid" class="highlight">$34 USD</strong>
+              </div>
+              <div>
+                <small>DISTANCE</small>
+                <strong id="pass-dist-text">140m away</strong>
+              </div>
+            </div>
+
+            <div class="pass-venue-info">
+              <small>VENUE & ADDRESS</small>
+              <strong id="pass-venue-name">Nuha-dong Hanok Pavilion</strong>
+              <p id="pass-venue-address">24 Jahamun-ro 7-gil, Jongno-gu, Seoul</p>
+            </div>
+
+            <div class="pass-qr-box">
+              <svg viewBox="0 0 100 100" class="pass-qr-svg">
+                <rect width="100" height="100" fill="#ffffff" />
+                <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M20,20 h10 v10 h-10 z" fill="#0f172a" />
+                <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M70,20 h10 v10 h-10 z" fill="#0f172a" />
+                <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M20,70 h10 v10 h-10 z" fill="#0f172a" />
+                <rect x="45" y="15" width="8" height="20" fill="#0f172a" />
+                <rect x="45" y="45" width="10" height="10" fill="#0f172a" />
+                <rect x="65" y="55" width="25" height="10" fill="#0f172a" />
+                <rect x="55" y="75" width="35" height="15" fill="#0f172a" />
+              </svg>
+              <span>Scan at the Hanok / studio entrance</span>
+            </div>
+          </div>
+
+          <div class="pass-bottom-actions">
+            <button class="btn-pass-walk" id="pass-btn-start-nav">
+              🚶 Start Turn-by-Turn Walking Route
+            </button>
+            <button class="btn-pass-story" id="pass-btn-share-story">
+              📸 Share to Instagram Story
+            </button>
+            <a href="#" class="btn-pass-gmaps" id="pass-link-gmaps" target="_blank" rel="noopener">
+              📍 Open in Google Maps App
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Turn-by-Turn GPS Navigation Fullscreen Mobile HUD -->
+    <div class="mobile-nav-hud" id="nav-hud-modal">
+      <div class="nav-hud-sheet">
+        <div class="nav-hud-top">
+          <div class="nav-dest-row">
+            <span class="nav-icon-pulse">🚶</span>
+            <div>
+              <h4 id="nav-hud-dest-title">Nuha-dong Hanok Pavilion</h4>
+              <p id="nav-hud-dest-address">24 Jahamun-ro 7-gil, Seoul</p>
+            </div>
+          </div>
+          <button class="btn-nav-hud-close" id="btn-close-nav">✕</button>
+        </div>
+
+        <div class="nav-metrics-bar">
+          <div class="metric-cell">
+            <span>Remaining Distance</span>
+            <strong id="nav-hud-total-dist">210m</strong>
+          </div>
+          <div class="metric-cell">
+            <span>Walking Time</span>
+            <strong class="highlight" id="nav-hud-walk-time">3 min</strong>
+          </div>
+        </div>
+
+        <div class="nav-steps-scroller" id="nav-hud-steps-list"></div>
+
+        <div class="nav-hud-actions">
+          <a href="#" id="nav-hud-link-gmaps" class="btn-nav-gmaps-direct" target="_blank" rel="noopener">
+            🧭 Open Live Route in Google Maps App
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. User Profile Modal -->
+    <div class="mobile-bottom-sheet" id="auth-modal">
+      <div class="sheet-backdrop"></div>
+      <div class="sheet-panel">
+        <button class="sheet-close-btn">&times;</button>
+
+        <div id="auth-profile-section" class="profile-sheet-wrap">
+          <div class="profile-avatar-row">
+            <img id="profile-avatar-large" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120" alt="Avatar" />
+            <div>
+              <h3 id="profile-name-large">Alex Johnson</h3>
+              <p id="profile-email-large">alex.traveler@gmail.com</p>
+              <span class="m-profile-tag" id="profile-nationality">United States 🇺🇸</span>
+            </div>
+          </div>
+
+          <div class="profile-quick-stats">
+            <div class="stat-box">
+              <strong id="profile-passes-count">1</strong>
+              <span>Active Passes</span>
+            </div>
+            <div class="stat-box">
+              <strong id="profile-wishlist-count">2</strong>
+              <span>Wishlist</span>
+            </div>
+          </div>
+
+          <div class="profile-menu-list">
+            <button class="profile-menu-item" id="btn-change-lang-from-profile">
+              <span>🌐 Change Language (언어 설정)</span>
+              <strong id="profile-lang-indicator">English (EN)</strong>
+            </button>
+            <button class="profile-menu-item" id="btn-view-passes-from-profile">
+              <span>🎟️ My Booked Passes</span>
+              <span>›</span>
+            </button>
+            <button class="profile-menu-item" id="btn-sign-out">
+              <span class="text-danger">🚪 Sign Out</span>
+              <span>›</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="auth-login-section" class="hidden login-sheet-wrap">
+          <div class="login-prompt">
+            <span class="g-logo">G</span>
+            <h3>Welcome to 9SEOUL</h3>
+            <p>Sign in with your Google account to access your mobile passes and booking history.</p>
+          </div>
+          <button id="btn-google-signin-action" class="btn-m-google-oauth">
+            <svg class="google-svg" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Real-time Clock Script -->
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const el = document.getElementById('app-clock');
+      if (el) el.textContent = `${hrs}:${mins}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  </script>
+
+  <!-- Application Modules -->
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/host.js"></script>
+
+  <!-- ===== 9SEOUL HOST PORTAL OVERLAY ===== -->
+  <div id="host-portal-overlay" class="host-portal-overlay">
+
+    <!-- Close Button -->
+    <button class="host-portal-close" id="host-portal-close-btn">✕</button>
+
+    <!-- ─── SCREEN: ENTRY ─── -->
+    <div class="hp-screen active" id="hp-entry">
+      <div class="hp-entry-logo">
+        <div class="hp-logo-badge">9</div>
+        <h2>9SEOUL</h2>
+        <p>파트너 & 마스터 전용 포털</p>
+      </div>
+      <div class="hp-entry-btns">
+        <button class="hp-btn-primary" id="hp-btn-go-host-login">🏠 호스트 로그인 / 가입</button>
+        <button class="hp-btn-master" id="hp-btn-go-master-login">🔐 9SEOUL 마스터 로그인</button>
+      </div>
+    </div>
+
+    <!-- ─── SCREEN: HOST AUTH (Login or Signup tabs) ─── -->
+    <div class="hp-screen" id="hp-host-auth">
+      <button class="hp-back-btn" data-target="hp-entry">← 뒤로</button>
+      <h3 class="hp-screen-title">호스트 계정</h3>
+      <div class="hp-tab-row">
+        <button class="hp-tab active" data-tab="hp-tab-login">로그인</button>
+        <button class="hp-tab" data-tab="hp-tab-signup">신규 가입</button>
+      </div>
+
+      <!-- Login -->
+      <div class="hp-tab-pane active" id="hp-tab-login">
+        <div class="hp-field">
+          <label>이메일</label>
+          <input type="email" id="host-login-email" placeholder="host@example.com" />
+        </div>
+        <button class="hp-btn-primary" id="hp-btn-login-submit">로그인</button>
+        <p class="hp-msg" id="hp-login-msg"></p>
+      </div>
+
+      <!-- Sign-up -->
+      <div class="hp-tab-pane" id="hp-tab-signup">
+        <!-- Business type -->
+        <div class="hp-field">
+          <label>사업자 유형</label>
+          <div class="hp-type-toggle">
+            <button class="hp-type-btn active" data-type="business">🏢 사업자</button>
+            <button class="hp-type-btn" data-type="individual">👤 개인</button>
+          </div>
+        </div>
+        <input type="hidden" id="host-reg-type" value="business" />
+
+        <div class="hp-field">
+          <label>이름 / 상호명</label>
+          <input type="text" id="host-reg-name" placeholder="홍길동 / (주)서울공방" />
+        </div>
+        <div class="hp-field">
+          <label>이메일</label>
+          <input type="email" id="host-reg-email" placeholder="host@example.com" />
+        </div>
+        <div class="hp-field">
+          <label>연락처</label>
+          <input type="tel" id="host-reg-phone" placeholder="010-0000-0000" />
+        </div>
+
+        <!-- Business doc upload -->
+        <div class="hp-field" id="biz-doc-field">
+          <label>사업자등록증 업로드 <span class="req">필수</span></label>
+          <div class="hp-upload-zone" id="biz-doc-zone">
+            <span>📄 파일 클릭 또는 드래그</span>
+            <input type="file" id="biz-doc-input" accept="image/*,application/pdf" class="hp-file-input" />
+          </div>
+          <div class="hp-upload-preview" id="biz-doc-preview"></div>
+        </div>
+
+        <!-- Individual ID upload -->
+        <div class="hp-field hidden" id="id-doc-field">
+          <label>신분증 업로드 <span class="req">필수</span></label>
+          <div class="hp-upload-zone" id="id-doc-zone">
+            <span>🪪 파일 클릭 또는 드래그</span>
+            <input type="file" id="id-doc-input" accept="image/*" class="hp-file-input" />
+          </div>
+          <div class="hp-upload-preview" id="id-doc-preview"></div>
+        </div>
+
+        <!-- Bank copy upload (always required) -->
+        <div class="hp-field">
+          <label>통장 사본 <span class="req">필수</span></label>
+          <div class="hp-upload-zone" id="bank-doc-zone">
+            <span>🏦 파일 클릭 또는 드래그</span>
+            <input type="file" id="bank-doc-input" accept="image/*,application/pdf" class="hp-file-input" />
+          </div>
+          <div class="hp-upload-preview" id="bank-doc-preview"></div>
+        </div>
+
+        <button class="hp-btn-primary" id="hp-btn-signup-submit">가입 완료</button>
+        <p class="hp-msg" id="hp-signup-msg"></p>
+      </div>
+    </div>
+
+    <!-- ─── SCREEN: HOST DASHBOARD ─── -->
+    <div class="hp-screen" id="hp-host-dashboard">
+      <div class="hp-dash-header">
+        <div>
+          <h3 id="hp-dash-welcome">안녕하세요!</h3>
+          <small id="hp-dash-type-badge" class="hp-host-badge"></small>
+        </div>
+        <button class="hp-logout-btn" id="hp-host-logout-btn">로그아웃</button>
+      </div>
+
+      <button class="hp-btn-primary hp-new-prog-btn" id="hp-btn-new-program">+ 새 프로그램 등록</button>
+
+      <h4 class="hp-section-label">내 프로그램 현황</h4>
+      <div id="hp-my-programs-list" class="hp-programs-list">
+        <p class="hp-empty-msg">아직 등록된 프로그램이 없습니다.</p>
+      </div>
+    </div>
+
+    <!-- ─── SCREEN: PROGRAM FORM ─── -->
+    <div class="hp-screen" id="hp-program-form">
+      <button class="hp-back-btn" data-target="hp-host-dashboard">← 대시보드</button>
+      <h3 class="hp-screen-title">프로그램 등록</h3>
+
+      <div class="hp-form-scroll">
+        <!-- Basic Info -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">📋 기본 정보</h4>
+          <div class="hp-field">
+            <label>프로그램명 (한국어)</label>
+            <input type="text" id="pf-title-ko" placeholder="예: 서촌 전통 도자기 클래스" />
+          </div>
+          <div class="hp-field">
+            <label>Program Name (English)</label>
+            <input type="text" id="pf-title-en" placeholder="e.g. Seochon Traditional Pottery Class" />
+          </div>
+          <div class="hp-field">
+            <label>카테고리</label>
+            <div class="hp-type-toggle">
+              <button class="hp-type-btn active" data-cat="experience">🍵 Experience</button>
+              <button class="hp-type-btn" data-cat="making">🏺 Making</button>
+            </div>
+            <input type="hidden" id="pf-category" value="experience" />
+          </div>
+          <div class="hp-field-row">
+            <div class="hp-field">
+              <label>금액 (KRW)</label>
+              <input type="number" id="pf-price-krw" placeholder="50000" min="0" />
+            </div>
+            <div class="hp-field">
+              <label>금액 (USD)</label>
+              <input type="number" id="pf-price-usd" placeholder="38" min="0" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">📅 일시 & 슬롯</h4>
+          <div id="pf-slots-container">
+            <div class="pf-slot-row">
+              <input type="time" class="pf-slot-time" value="14:00" />
+              <input type="number" class="pf-slot-spots" placeholder="인원 (최대)" value="6" min="1" max="30" />
+              <button class="pf-slot-remove" title="삭제">✕</button>
+            </div>
+          </div>
+          <button class="hp-btn-ghost" id="pf-add-slot-btn">+ 슬롯 추가</button>
+        </div>
+
+        <!-- Venue -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">📍 장소</h4>
+          <div class="hp-field">
+            <label>장소명</label>
+            <input type="text" id="pf-venue-name" placeholder="예: 서촌 한옥 스튜디오" />
+          </div>
+          <div class="hp-field">
+            <label>주소</label>
+            <input type="text" id="pf-venue-address" placeholder="예: 서울 종로구 자하문로 24" />
+          </div>
+        </div>
+
+        <!-- Mood Photo -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">🖼️ 전체 무드 사진 (1장)</h4>
+          <div class="hp-upload-zone" id="pf-mood-zone">
+            <span>📷 대표 사진 업로드</span>
+            <input type="file" id="pf-mood-input" accept="image/*" class="hp-file-input" />
+          </div>
+          <div class="hp-upload-preview" id="pf-mood-preview"></div>
+        </div>
+
+        <!-- Full Description -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">📝 프로그램 전체 설명</h4>
+          <textarea id="pf-desc-full" class="hp-textarea" rows="4" placeholder="프로그램의 전반적인 내용과 특징을 설명해 주세요 (영문)"></textarea>
+          <textarea id="pf-desc-ko" class="hp-textarea" rows="3" placeholder="한국어 설명 (선택)" style="margin-top:8px"></textarea>
+        </div>
+
+        <!-- Detail Shots x3 -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">📸 디테일 샷 (3장)</h4>
+          <div class="hp-detail-shots-grid">
+            <div class="hp-upload-zone hp-detail-zone" data-idx="0">
+              <span>사진 1</span>
+              <input type="file" class="pf-detail-input hp-file-input" accept="image/*" data-idx="0" />
+            </div>
+            <div class="hp-upload-zone hp-detail-zone" data-idx="1">
+              <span>사진 2</span>
+              <input type="file" class="pf-detail-input hp-file-input" accept="image/*" data-idx="1" />
+            </div>
+            <div class="hp-upload-zone hp-detail-zone" data-idx="2">
+              <span>사진 3</span>
+              <input type="file" class="pf-detail-input hp-file-input" accept="image/*" data-idx="2" />
+            </div>
+          </div>
+          <div id="pf-detail-previews" class="hp-detail-preview-row"></div>
+        </div>
+
+        <!-- Program Detail Description -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">✍️ 세부 프로그램 설명</h4>
+          <textarea id="pf-desc-detail" class="hp-textarea" rows="4" placeholder="단계별 진행 방식, 포함 사항, 주의사항 등을 입력해 주세요"></textarea>
+          <div class="hp-field" style="margin-top:10px">
+            <label>포함 사항 (쉼표로 구분)</label>
+            <input type="text" id="pf-inclusions" placeholder="재료 포함, English Guide, 차 한 잔" />
+          </div>
+        </div>
+
+        <!-- Extra Sections (dynamic) -->
+        <div class="hp-form-section">
+          <h4 class="hp-form-section-title">➕ 추가 섹션</h4>
+          <div id="pf-extra-sections"></div>
+          <button class="hp-btn-ghost" id="pf-add-extra-btn">+ 사진 & 설명 섹션 추가</button>
+        </div>
+
+        <!-- Submit -->
+        <button class="hp-btn-primary hp-submit-btn" id="hp-btn-program-submit">📤 프로그램 제출 (심사 요청)</button>
+        <p class="hp-msg" id="hp-program-msg"></p>
+      </div>
+    </div>
+
+    <!-- ─── SCREEN: MASTER LOGIN ─── -->
+    <div class="hp-screen" id="hp-master-login">
+      <button class="hp-back-btn" data-target="hp-entry">← 뒤로</button>
+      <div class="hp-master-icon">🔐</div>
+      <h3 class="hp-screen-title">9SEOUL 마스터 로그인</h3>
+      <p class="hp-master-sub">운영팀 전용 계정으로 로그인하세요</p>
+      <div class="hp-field">
+        <label>Master ID</label>
+        <input type="text" id="master-login-id" placeholder="9seoul_master" autocomplete="off" />
+      </div>
+      <div class="hp-field">
+        <label>Password</label>
+        <input type="password" id="master-login-pw" placeholder="••••••••••••" />
+      </div>
+      <button class="hp-btn-primary" id="hp-btn-master-login-submit">로그인</button>
+      <p class="hp-msg" id="hp-master-login-msg"></p>
+    </div>
+
+    <!-- ─── SCREEN: MASTER DASHBOARD ─── -->
+    <div class="hp-screen" id="hp-master-dashboard">
+      <div class="hp-dash-header">
+        <div>
+          <h3>9SEOUL 마스터</h3>
+          <small class="hp-host-badge master-badge">운영팀</small>
+        </div>
+        <button class="hp-logout-btn" id="hp-master-logout-btn">로그아웃</button>
+      </div>
+
+      <div class="hp-master-tabs">
+        <button class="hp-tab active" data-mtab="pending">대기중 <span id="hp-pending-count" class="hp-count-badge">0</span></button>
+        <button class="hp-tab" data-mtab="all">전체 이력</button>
+      </div>
+
+      <div id="hp-master-pending-list" class="hp-programs-list"></div>
+      <div id="hp-master-all-list" class="hp-programs-list hidden"></div>
+    </div>
+
+  </div><!-- /.host-portal-overlay -->
+
+</html>
