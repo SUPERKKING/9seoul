@@ -1056,7 +1056,7 @@ class MobileApp {
       <div class="review-item-card" style="border-color:#be123c;">
         <div class="review-user-row">
           <div class="review-user-info">
-            <img src="${authManager.currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" alt="User" />
+            <img src="${authManager.currentUser.avatar || 'avatar_art.jpg'}" alt="User" />
             <div>
               <strong>${authManager.currentUser.name}</strong>
               <small>${authManager.currentUser.nationality}</small>

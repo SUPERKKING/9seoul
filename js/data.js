@@ -243,7 +243,7 @@ export const INITIAL_PROGRAMS = [
         id: "rev-4-1",
         author: "David Miller",
         country: "🇦🇺 Sydney, Australia",
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",
+        avatar: "avatar_art.jpg",
         rating: 5,
         date: "Yesterday",
         text: "The best souvenir from my entire Asia trip! Stamping my Hangul name in red ink on mulberry paper felt so authentic.",
